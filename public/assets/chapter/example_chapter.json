@@ -1,0 +1,29 @@
+{
+  "id": 1,
+  "pages": [
+    {
+      "page_number": 1,
+      "content_url": "/assets/pages/page1.png"
+    },
+    {
+      "page_number": 2,
+      "content_url": "/assets/pages/page2.png"
+    },
+    {
+      "page_number": 3,
+      "content_url": "/assets/pages/page3.png"
+    },
+    {
+      "page_number": 4,
+      "content_url": "/assets/pages/page4.png"
+    },
+    {
+      "page_number": 5,
+      "content_url": "/assets/pages/page5.png"
+    },
+    {
+      "page_number": 6,
+      "content_url": "/assets/pages/page6.png"
+    }
+  ]
+}
