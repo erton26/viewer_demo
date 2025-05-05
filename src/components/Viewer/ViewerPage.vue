@@ -9,7 +9,7 @@
 
   function getPages() {
     return [props.exampleChapter.pages[props.currentPage-1]]
-  }
+  };
 </script>
 
 <template>
