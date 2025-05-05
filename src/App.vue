@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import ViewerMain from './components/Viewer/ViewerMain.vue';
+  import Viewer from './components/Viewer/Viewer.vue';
 </script>
 
 <template>
   <main>
-    <ViewerMain />
+    <Viewer />
   </main>
 </template>
 
