@@ -84,7 +84,7 @@
 }
 
 .menu-closed-cursor {
-  cursor: url(../../assets/viewer_cursors/menu.png), auto;
+  cursor: url(../../assets/viewer_cursors/setting.png), auto;
 }
 
 .menu-opened-cursor {
