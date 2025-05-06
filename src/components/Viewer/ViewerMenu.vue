@@ -1,20 +1,24 @@
 <script setup lang="ts">
-  import { ref, defineProps } from 'vue';
+  import { ref, defineProps, watch } from 'vue';
 
   const props = defineProps<{
     totalPageNum: number;
     showMenu: boolean;
   }>();
 
-  const currentPage = defineModel<number>('currentPage', { required: true });
+  const currentPageNum = defineModel<number>('currentPageNum', { required: true });
   const sliderOn = ref<boolean>(false);
+  const sliderValueTmp = ref<number>(currentPageNum.value);
 
-  // sliderを離す時にページ移動させるため
-  const sliderValueTmp = ref<number>(currentPage.value);
+  // @change="handleSliderChange"で、input sliderを離す時にページ移動させるように
   function handleSliderChange() {
-    currentPage.value = sliderValueTmp.value;
-    
+    currentPageNum.value = sliderValueTmp.value;
   };
+
+  // input sliderの状況がcurrentPageNum値の変化を反映させるように
+  watch(currentPageNum, (currentPageNumValue: number) => {
+    sliderValueTmp.value = currentPageNumValue;
+  }, { immediate: true });
 </script>
 
 <template>
@@ -47,12 +51,6 @@
 </template>
 
 <style scoped>
-.menu-container {
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-}
-
 .menu-background {
   background-color: black;
   opacity: 90%;
@@ -74,7 +72,7 @@
 }
 
 .page-number-view {
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: center;

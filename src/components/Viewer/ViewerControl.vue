@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { ref, defineProps, defineModel } from 'vue';
+  import { ref, defineProps, defineModel, computed } from 'vue';
 
   const props = defineProps<{
     totalPageNum: number;
+    showDoublePage: boolean;
   }>();
 
-  const currentPage = defineModel<number>('currentPage', { required: true });
+  const currentPageNum = defineModel<number>('currentPageNum', { required: true });
   const showMenu = defineModel<boolean>('showMenu', { required: true });
 
   const controlDiv = ref<HTMLElement | null>(null);
@@ -14,59 +15,70 @@
   function updateCursor(event: { clientX: number; }) {
     if (!controlDiv.value) return;
 
-    const menuAreaWidth = 400;
+    const menuAreaWidth = 300;
+    const { clientWidth } = controlDiv.value;
+    const nextPageXBoundary = (clientWidth - menuAreaWidth) / 2;
+    const previousPageXBoundary = (clientWidth + menuAreaWidth) / 2;
 
     if (showMenu.value === true) {
       cursorClass.value = "menuOpened";
     }
-    else if (event.clientX < controlDiv.value.clientWidth / 2 - menuAreaWidth / 2) {
-      if (currentPage.value < props.totalPageNum) {
-        cursorClass.value = "next";
-      }
-      else {
-        cursorClass.value = "stop";
-      }
+    else if (event.clientX < nextPageXBoundary) {
+      cursorClass.value = currentPageNum.value < props.totalPageNum ? "next" : "stop";
     }
-    else if (event.clientX > controlDiv.value.clientWidth / 2 + menuAreaWidth / 2) {
-      if (currentPage.value > 1) {
-        cursorClass.value = "before";
-      }
-      else {
-        cursorClass.value = "stop";
-      }
+    else if (event.clientX > previousPageXBoundary) {
+      cursorClass.value = currentPageNum.value > 1 ? "previous" : "stop";
     }
     else {
       cursorClass.value = "menuClosed";
     }
   };
 
-  function handleMouseClick(event: any) {
-    if (cursorClass.value === "next") {
-      currentPage.value += 1;
+  const pageChange = computed((): number => {
+    return props.showDoublePage ? 2 : 1;
+  });
+  
+  function handleMouseClick(event: MouseEvent) {
+    switch(cursorClass.value) {
+      case "next":
+        currentPageNum.value += pageChange.value;
+        break;
+      case "previous":
+        currentPageNum.value -= pageChange.value;
+        break;
+      case "menuOpened":
+      case "menuClosed":
+        const newShowMenuValue: boolean = !showMenu.value;
+        showMenu.value = newShowMenuValue;
+        cursorClass.value = newShowMenuValue ? "menuOpened" : "menuClosed";
+        break;
+    };
+  };
+
+  function handleMouseScroll(event: { deltaY: number; }) {
+    const isScrollingUp: boolean = event.deltaY < 0;
+
+    if (isScrollingUp) {
+      currentPageNum.value -= pageChange.value;
     }
-    else if (cursorClass.value === "before") {
-      currentPage.value -= 1;
-    }
-    if (cursorClass.value === "menuOpened" || cursorClass.value === "menuClosed") {
-      const newShowMenuValue = !showMenu.value;
-      showMenu.value = newShowMenuValue;
-      cursorClass.value = newShowMenuValue ? "menuOpened" : "menuClosed";
+    else {
+      currentPageNum.value += pageChange.value;
     }
   };
 </script>
 
 <template>
-  <div 
-    class="control"
+  <div class="control"
     :class="{ 
       'next-page-cursor': cursorClass === 'next',
       'menu-closed-cursor': cursorClass === 'menuClosed',
       'menu-opened-cursor': cursorClass === 'menuOpened',
-      'before-page-cursor': cursorClass === 'before',
+      'previous-page-cursor': cursorClass === 'previous',
       'stop-cursor': cursorClass === 'stop'
     }"
     @mousemove="updateCursor"
     @click="handleMouseClick"
+    @wheel="handleMouseScroll"
     ref="controlDiv"
   >
   </div>
@@ -74,28 +86,28 @@
 
 <style scoped>
 .control {
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
 }
 
 .next-page-cursor {
-  cursor: url(../../assets/viewer_cursors/arrow_left.png), auto;
-}
+  cursor: url(../../assets/viewer_cursors/arrow_left.png) 16 16, auto;
+} 
 
 .menu-closed-cursor {
-  cursor: url(../../assets/viewer_cursors/setting.png), auto;
+  cursor: url(../../assets/viewer_cursors/setting.png) 16 16, auto;
 }
 
 .menu-opened-cursor {
   cursor: default;
 }
 
-.before-page-cursor {
-  cursor: url(../../assets/viewer_cursors/arrow_right.png), auto;
+.previous-page-cursor {
+  cursor: url(../../assets/viewer_cursors/arrow_right.png) 16 16, auto;
 }
 
 .stop-cursor {
-  cursor: url(../../assets/viewer_cursors/stop.png), auto;
+  cursor: url(../../assets/viewer_cursors/stop.png) 16 16, auto;
 }
 </style>

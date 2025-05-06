@@ -1,36 +1,57 @@
 <script setup lang="ts">
-  import { defineProps } from 'vue';
-  import type { Chapter } from './types';
+  import { ref, computed, defineProps, watch } from 'vue';
+  import type { Chapter, Page } from './types';
 
   const props = defineProps<{
     exampleChapter: Chapter;
-    currentPage: number;
+    currentPageNum: number;
+    showDoublePage: boolean;
   }>();
 
-  function getPages() {
-    return [props.exampleChapter.pages[props.currentPage-1]]
-  };
+  const currentPages = computed((): Page[] => {
+    const currentPageNumHalved: number = Math.floor(props.currentPageNum / 2);
+    if (props.showDoublePage) {
+      return [props.exampleChapter.pages[currentPageNumHalved*2], props.exampleChapter.pages[currentPageNumHalved*2-1]];
+    }
+    else {
+      return [props.exampleChapter.pages[props.currentPageNum-1]];
+    }
+  });
 </script>
 
 <template>
-  <div class="page">
-    <img v-for="page in getPages()" :src="page.content_url" alt="test">
+  <div class="pages-container">
+    <img class="page-view" 
+      :class="{ 'double-page-view': showDoublePage === true, 'single-page-view': showDoublePage === false }" 
+      v-for="page in currentPages"
+      :src="page.content_url"
+      alt="test"
+    >
   </div>
 </template>
 
 <style scoped>
-.page {
-  position: absolute;
+.pages-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
 }
 
-.page img {
-  height: 100vh;
+.page-view {
+  height: 100%;
   width: auto;
+  max-width: 100%;
   object-fit: contain;
+}
+
+.double-page-view{
+  max-width: 50%;
+}
+
+.single-page-view{
+  max-width: 100%;
 }
 </style>
