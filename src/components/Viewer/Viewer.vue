@@ -2,6 +2,7 @@
   import ViewerPage from './ViewerPage.vue';
   import ViewerControl from './ViewerControl.vue';
   import ViewerMenu from './ViewerMenu.vue';
+  import ViewerGuide from './ViewerGuide.vue';
 
   import { ref, computed, onMounted } from 'vue';
   import exampleChapterJson from '../../../public/assets/chapter/example_chapter.json';
@@ -23,9 +24,6 @@
   });
 
   const pointerDown = ref<boolean>(false);
-  function handlePointerDown(event: PointerEvent) {
-    pointerDown.value = true;
-  };
 
   const viewerDiv = ref<HTMLElement | null>(null);
   const clientWidth = ref<number>(0);
@@ -74,16 +72,15 @@
       :sliderOn="sliderOn"
       v-model:currentPageNum="currentPageNum"
       v-model:showMenu="showMenu"
-      v-model:pointerDown="pointerDown"
-      @pointer-down-event="handlePointerDown"
     />
     <ViewerMenu
       :totalPageNum="totalPageNum"
       :showMenu="showMenu"
       v-model:currentPageNum="currentPageNum"
       v-model:sliderOn="sliderOn"
+    />
+    <ViewerGuide
       v-model:pointerDown="pointerDown"
-      @pointer-down-event="handlePointerDown"
     />
   </div>
 </template>
