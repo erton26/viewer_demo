@@ -22,10 +22,11 @@
 <template>
   <div class="pages-container">
     <img class="page-view" 
-      :class="{ 'double-page-view': showDoublePage === true, 'single-page-view': showDoublePage === false }" 
+      :class="{ 'double-page-view': showDoublePage, 'single-page-view': !showDoublePage }" 
       v-for="page in currentPages"
+      :key="page.page_number"
       :src="page.content_url"
-      alt="test"
+      alt="page"
     >
   </div>
 </template>

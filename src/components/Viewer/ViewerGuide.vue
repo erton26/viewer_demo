@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <div class="guide-container" :class="{ 'hidden': pointerDown === true }" @pointerdown="handlePointerDown">
+  <div class="guide-container" :class="{ 'hidden': pointerDown }" @pointerdown="handlePointerDown">
     <div class="guide-view menu-background">
       <div class="guide-text">
         <span>左ページへ移動：左側をクリック / 下にスクロール</span>

@@ -12,13 +12,13 @@
   const sliderOn = defineModel<boolean>("sliderOn" , { required: true });
   const sliderValueTmp = ref<number>(currentPageNum.value);
 
-  // @change="handleSliderChange"で、input sliderを離す時にページ移動させるように
   function handleSliderChange() {
+    // @change="handleSliderChange"で、input sliderを離す時にページ移動させるように
     currentPageNum.value = sliderValueTmp.value;
   };
 
-  // input sliderの状況がcurrentPageNum値の変化を反映させるように
   watch(currentPageNum, (currentPageNumValue: number) => {
+    // input sliderの状況がcurrentPageNum値の変化を反映させるように
     sliderValueTmp.value = currentPageNumValue;
   }, { immediate: true });
 </script>

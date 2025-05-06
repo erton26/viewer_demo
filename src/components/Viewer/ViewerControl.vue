@@ -35,6 +35,8 @@
   };
 
   const pageChange = computed((): number => {
+    // 画面に２枚のページが表示される場合、表示が変わるためにpageChangeが-2か2であることが必要
+    // 画面に表示されるページ数により、ページ移動の幅が変わるように
     return props.showDoublePage ? 2 : 1;
   });
   
@@ -48,8 +50,10 @@
         break;
       case "menuOpened":
       case "menuClosed":
+        // クリックされる後にmenu表示がすぐ変わるように
         const newShowMenuValue: boolean = !showMenu.value;
         showMenu.value = newShowMenuValue;
+
         cursorClass.value = newShowMenuValue ? "menuOpened" : "menuClosed";
         break;
     };

@@ -34,9 +34,12 @@
       return false;
     }
     else if (currentPageNumHalved === 0) {
+      // 最初のページは１枚のみ表示されるように
       return false;
     }
     else if (currentPageNumHalved === Math.floor(totalPageNum / 2) && totalPageNum % 2 === 0) {
+      // 総ページ数が偶数の場合、1ページのみ読み込まれる
+      // 最後のページが正しく表示されるように
       return false;
     }
     else {
@@ -44,9 +47,9 @@
     }
   });
   
-  // viewer-containerの幅により表示するページ数が変わるように
   const resizeObserver = ref<ResizeObserver | null>(null);
-  onMounted(() => {
+  function updateClientWidth() {
+    // viewer-containerの幅により表示するページ数が変わるように
     if (!viewerDiv.value) return;
     
     resizeObserver.value = new ResizeObserver((entries) => {
@@ -56,6 +59,10 @@
     });
     
     resizeObserver.value.observe(viewerDiv.value);
+  }
+
+  onMounted(() => {
+    updateClientWidth();
   });
 </script>
 
