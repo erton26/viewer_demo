@@ -7,6 +7,9 @@
   import exampleChapterJson from '../../../public/assets/chapter/example_chapter.json';
   import type { Chapter } from './types';
 
+  const showMenu = ref<boolean>(false);
+  const sliderOn = ref<boolean>(false);
+
   const exampleChapter = exampleChapterJson as unknown as Chapter;
   const totalPageNum: number = exampleChapter.pages.length;
   const currentPageNumDefault = ref<number>(1);
@@ -19,7 +22,10 @@
     }
   });
 
-  const showMenu = ref<boolean>(false);
+  const pointerDown = ref<boolean>(false);
+  function handlePointerDown(event: PointerEvent) {
+    pointerDown.value = true;
+  };
 
   const viewerDiv = ref<HTMLElement | null>(null);
   const clientWidth = ref<number>(0);
@@ -57,9 +63,28 @@
 
 <template>
   <div class="viewer-container" ref="viewerDiv">
-    <ViewerPage :exampleChapter="exampleChapter" :currentPageNum="currentPageNum" :showDoublePage="showDoublePage" />
-    <ViewerControl :totalPageNum="totalPageNum" :showDoublePage="showDoublePage" v-model:currentPageNum="currentPageNum" v-model:showMenu="showMenu" />
-    <ViewerMenu :totalPageNum="totalPageNum" :showMenu="showMenu" v-model:currentPageNum="currentPageNum" />
+    <ViewerPage
+      :exampleChapter="exampleChapter"
+      :currentPageNum="currentPageNum"
+      :showDoublePage="showDoublePage"
+    />
+    <ViewerControl
+      :totalPageNum="totalPageNum" 
+      :showDoublePage="showDoublePage"
+      :sliderOn="sliderOn"
+      v-model:currentPageNum="currentPageNum"
+      v-model:showMenu="showMenu"
+      v-model:pointerDown="pointerDown"
+      @pointer-down-event="handlePointerDown"
+    />
+    <ViewerMenu
+      :totalPageNum="totalPageNum"
+      :showMenu="showMenu"
+      v-model:currentPageNum="currentPageNum"
+      v-model:sliderOn="sliderOn"
+      v-model:pointerDown="pointerDown"
+      @pointer-down-event="handlePointerDown"
+    />
   </div>
 </template>
 

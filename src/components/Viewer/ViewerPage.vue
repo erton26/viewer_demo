@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, defineProps, watch } from 'vue';
+  import { computed, defineProps } from 'vue';
   import type { Chapter, Page } from './types';
 
   const props = defineProps<{

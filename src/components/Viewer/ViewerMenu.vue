@@ -6,8 +6,11 @@
     showMenu: boolean;
   }>();
 
-  const currentPageNum = defineModel<number>('currentPageNum', { required: true });
-  const sliderOn = ref<boolean>(false);
+  const emit = defineEmits(['pointer-down-event']);
+
+  const currentPageNum = defineModel<number>("currentPageNum", { required: true });
+  const sliderOn = defineModel<boolean>("sliderOn" , { required: true });
+  const pointerDown = defineModel<boolean>("pointerDown", { required: true });
   const sliderValueTmp = ref<number>(currentPageNum.value);
 
   // @change="handleSliderChange"で、input sliderを離す時にページ移動させるように
@@ -25,11 +28,27 @@
   <div class="menu-header-footer menu-background menu-header" :class="{ 'hidden': showMenu === false }">
 
   </div>
+
+  <div class="guide-view menu-background" :class="{ 'hidden': pointerDown === true }" @pointerdown="emit('pointer-down-event');">
+    <div class="guide-text">
+      <span>左ページへ移動：左側をクリック / 下にスクロール</span>
+    </div>
+    <div class="guide-text">
+      <span>右ページへ移動：右側をクリック / 上にスクロール</span>
+    </div>
+    <div class="guide-text">
+      <span>メニューを表示：中央をクリック</span>
+    </div>
+  </div>
     
   <div class="page-number-view menu-background" :class="{ 'hidden': sliderOn === false }">
-    <div class = "slider-page-number page-number">{{ sliderValueTmp }}</div>
+    <div class = "slider-page-number page-number">
+      <span>{{ sliderValueTmp }}</span>
+    </div>
     <hr>
-    <div class = "total-page-number page-number">{{ totalPageNum }}</div>
+    <div class = "total-page-number page-number">
+      <span>{{ totalPageNum }}</span>
+    </div>
   </div>
 
   <div class="menu-header-footer menu-background menu-footer" :class="{ 'hidden': showMenu === false }">
@@ -69,6 +88,23 @@
 .menu-footer {
   bottom: 0px; 
   height: 100px;
+}
+
+.guide-view {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 500px;
+  
+}
+
+.guide-text {
+  font-size: 1.1rem;
+  color: white;
+  padding: 10px;
 }
 
 .page-number-view {

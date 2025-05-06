@@ -4,16 +4,19 @@
   const props = defineProps<{
     totalPageNum: number;
     showDoublePage: boolean;
+    sliderOn: boolean;
   }>();
 
-  const currentPageNum = defineModel<number>('currentPageNum', { required: true });
-  const showMenu = defineModel<boolean>('showMenu', { required: true });
+  const emit = defineEmits(['pointer-down-event']);
+
+  const currentPageNum = defineModel<number>("currentPageNum", { required: true });
+  const showMenu = defineModel<boolean>("showMenu", { required: true });
+  const pointerDown = defineModel<boolean>("pointerDown", { required: true });
 
   const controlDiv = ref<HTMLElement | null>(null);
-  const cursorClass = ref<string>("menuClosed");
-
+  const cursorClass = ref<string>("default");
   function updateCursor(event: { clientX: number; }) {
-    if (!controlDiv.value) return;
+    if (!controlDiv.value || !pointerDown.value) return;
 
     const menuAreaWidth = 300;
     const { clientWidth } = controlDiv.value;
@@ -34,7 +37,9 @@
     }
   };
 
+  // sliderでページ移動している祭、他の移動手段ができないように
   const pageChange = computed((): number => {
+    if (props.sliderOn) return 0;
     return props.showDoublePage ? 2 : 1;
   });
   
@@ -70,6 +75,7 @@
 <template>
   <div class="control"
     :class="{ 
+      'default-cursor': cursorClass === 'default',
       'next-page-cursor': cursorClass === 'next',
       'menu-closed-cursor': cursorClass === 'menuClosed',
       'menu-opened-cursor': cursorClass === 'menuOpened',
@@ -79,6 +85,7 @@
     @mousemove="updateCursor"
     @click="handleMouseClick"
     @wheel="handleMouseScroll"
+    @pointerdown="emit('pointer-down-event');"
     ref="controlDiv"
   >
   </div>
@@ -89,6 +96,10 @@
   position: fixed;
   height: 100vh;
   width: 100vw;
+}
+
+.default-cursor {
+  cursor: default;
 }
 
 .next-page-cursor {
