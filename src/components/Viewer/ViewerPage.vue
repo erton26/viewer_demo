@@ -9,11 +9,11 @@
   // 型
   import type { Chapter, Page } from './types';
 
-  // props
+  // 親からのプロパティ
   const props = defineProps<{
-    exampleChapter: Chapter;
-    currentPageNum: number;
-    showDoublePage: boolean;
+    exampleChapter: Chapter; // 話の情報
+    currentPageNum: number; // 現在のページ数
+    showDoublePage: boolean; // ページ２枚示すフラグ
   }>();
 
   const currentPages = computed((): Page[] => {

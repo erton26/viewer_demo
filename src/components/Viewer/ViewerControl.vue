@@ -10,7 +10,7 @@
   const props = defineProps<{
     totalPageNum: number; // 総ページ数
     showDoublePage: boolean; // ページ２枚示すフラグ
-    sliderOn: boolean; // スライダーの状況
+    sliderOn: boolean; // スライダー使用フラグ
   }>();
 
   // v-model双方向バインディング

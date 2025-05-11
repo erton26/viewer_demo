@@ -6,13 +6,13 @@
   // vue
   import { ref, defineProps, watch } from 'vue';
 
-  // props
+  // 親からのプロパティ
   const props = defineProps<{
-    totalPageNum: number;
-    showMenu: boolean;
+    totalPageNum: number; // 総ページ数
+    showMenu: boolean; // メニュー表示フラグ
   }>();
 
-  // models
+  // v-model双方向バインディング
   const currentPageNum = defineModel<number>("currentPageNum", { required: true });
   const sliderOn = defineModel<boolean>("sliderOn" , { required: true });
 
