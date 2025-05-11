@@ -10,6 +10,7 @@
   const props = defineProps<{
     totalPageNum: number; // 総ページ数
     showDoublePage: boolean; // ページ２枚示すフラグ
+    sliderOn: boolean; // スライダーの状況
   }>();
 
   // v-model双方向バインディング
@@ -49,6 +50,10 @@
   };
 
   const pageChange = computed((): number => {
+    // chromeだとスライダ動かす祭にスクロールでページ移動可能になる
+    // sliderでページ移動している祭、他の移動手段ができないように
+    if (props.sliderOn) return 0;
+
     // 画面に２枚のページが表示される場合、表示が変わるためにpageChangeが-2か2であることが必要
     // 画面に表示されるページ数により、ページ移動の幅が変わるように
     return props.showDoublePage ? 2 : 1;

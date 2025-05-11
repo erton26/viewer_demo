@@ -100,6 +100,7 @@
     <ViewerControl
       :totalPageNum="totalPageNum" 
       :showDoublePage="showDoublePage"
+      :sliderOn="sliderOn"
       v-model:currentPageNum="currentPageNum"
       v-model:showMenu="showMenu"
     />
