@@ -1,14 +1,28 @@
 <script setup lang="ts">
+  /**
+   * ビュアー操作方法説明のコンポネント
+   */
+
+  // vue
   import { ref } from 'vue';
 
+  // 操作方法説明表示の管理
   const pointerDown = ref<boolean>(false);
   function handlePointerDown(event: PointerEvent) {
+    /**
+     * 操作方法説明を隠すように
+     */
     pointerDown.value = true;
   };
 </script>
 
 <template>
-  <div class="guide-container" :class="{ 'hidden': pointerDown }" @pointerdown="handlePointerDown">
+  <!-- ビュアー操作方法説明オーバーレイ -->
+  <div class="guide-container"
+    :class="{ 'hidden': pointerDown }"
+    @pointerdown="handlePointerDown"
+  >
+    <!-- ビュアー操作方法説明の内容 -->
     <div class="guide-view menu-background">
       <div class="guide-text">
         <span>左ページへ移動：左側をクリック / 下にスクロール</span>

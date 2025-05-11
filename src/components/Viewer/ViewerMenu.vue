@@ -1,44 +1,58 @@
 <script setup lang="ts">
+  /**
+   * ビュアーのメニューコンポネント
+   */
+
+  // vue
   import { ref, defineProps, watch } from 'vue';
 
+  // props
   const props = defineProps<{
     totalPageNum: number;
     showMenu: boolean;
   }>();
 
-  const emit = defineEmits(['pointer-down-event']);
-
+  // models
   const currentPageNum = defineModel<number>("currentPageNum", { required: true });
   const sliderOn = defineModel<boolean>("sliderOn" , { required: true });
+
+  // スライダーの状況による現在のページ数
   const sliderValueTmp = ref<number>(currentPageNum.value);
 
   function handleSliderChange() {
-    // @change="handleSliderChange"で、input sliderを離す時にページ移動させるように
+    /**
+     * スライダーの入力でページ移動
+     * @change="handleSliderChange"で、input sliderを離す時にページ移動させるように
+     */
     currentPageNum.value = sliderValueTmp.value;
   };
 
   watch(currentPageNum, (currentPageNumValue: number) => {
     // input sliderの状況がcurrentPageNum値の変化を反映させるように
     sliderValueTmp.value = currentPageNumValue;
-  }, { immediate: true });
+  });
 </script>
 
 <template>
+  <!-- メニューヘッダー -->
   <div class="menu-header-footer menu-background menu-header" :class="{ 'hidden': showMenu === false }">
 
   </div>
-    
+  
+  <!-- ページ数表示 -->
   <div class="page-number-view menu-background" :class="{ 'hidden': sliderOn === false }">
     <div class = "slider-page-number page-number">
       <span>{{ sliderValueTmp }}</span>
     </div>
-    <hr>
+    <hr class = "page-number-divider">
     <div class = "total-page-number page-number">
       <span>{{ totalPageNum }}</span>
     </div>
   </div>
 
+  <!-- メニューフッター -->
   <div class="menu-header-footer menu-background menu-footer" :class="{ 'hidden': showMenu === false }">
+    <!-- ページ移動用スライダー -->
     <div class="page-slider-container">
       <input class="page-slider-bar"
         type="range"
@@ -120,7 +134,7 @@
   direction: rtl;
 }
 
-hr {
+.page-number-divider {
   height: 2px;
   width: 20%;
   color: white;

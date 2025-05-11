@@ -1,7 +1,15 @@
 <script setup lang="ts">
+  /**
+   * ページの画像を示すコンポネント
+   */
+
+  // vue
   import { computed, defineProps } from 'vue';
+
+  // 型
   import type { Chapter, Page } from './types';
 
+  // props
   const props = defineProps<{
     exampleChapter: Chapter;
     currentPageNum: number;
@@ -9,6 +17,7 @@
   }>();
 
   const currentPages = computed((): Page[] => {
+    // 現在画面に示すページ
     const currentPageNumHalved: number = Math.floor(props.currentPageNum / 2);
     if (props.showDoublePage) {
       return [props.exampleChapter.pages[currentPageNumHalved*2], props.exampleChapter.pages[currentPageNumHalved*2-1]];
@@ -20,6 +29,7 @@
 </script>
 
 <template>
+  <!-- ページ画像表示 -->
   <div class="pages-container">
     <img class="page-view" 
       :class="{ 'double-page-view': showDoublePage, 'single-page-view': !showDoublePage }" 
